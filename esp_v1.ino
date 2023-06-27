@@ -14,8 +14,11 @@
 #define SERIAL_MONITOR        1 //set to 0 if you want to disable priting to serial monitor
 
 /* WiFi settings */
-const char* ssid = "Omar's phone";//A.hamid 
-const char* password = "12345689";
+//const char* ssid = "Omar's phone";//A.hamid 
+//const char* password = "12345689";
+
+const char* ssid = "WEE024C8";//A.hamid 
+const char* password = "l4061095";
 
 /* MQTT Broker settings */
 const char* mqtt_server = "6acf025f42a74ff5b4b455a12145644c.s2.eu.hivemq.cloud";
@@ -31,7 +34,7 @@ const char* Subscribed_Topic ="outTopic";
 
 const String V_ID                   = "A12";    //A.hamid 
 
-const char* V_ID_key                = "V_ID";//A.hamid 
+const char* V_ID_key                = "id";//A.hamid 
 const char* COLLISION_WARNING_key   = "collision warning";//A.hamid 
 const char* ROUTE_key               = "ROUTE";//A.hamid 
  
@@ -40,7 +43,10 @@ const char* ROUTE_key               = "ROUTE";//A.hamid
 
 #if SERIAL_MONITOR              //A.hamid 
 #define LOG(x) Serial.println(x)
+#else
+#define LOG(x) //x
 #endif
+
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
 
@@ -166,27 +172,48 @@ void callback(char* topic, byte* payload, unsigned int length)
 //A.hamid 
   const String msg_v_id = doc[V_ID_key];
   int collision_flag = doc[COLLISION_WARNING_key];
-  const char* route_direction = doc[ROUTE_key];
+  String route_direction = doc[ROUTE_key];
+//route_direction = doc[ROUTE_key];
+//  const char* r = "r";
+//  const char* R = "R";
+  LOG(COLLISION_WARNING_key);
+  LOG(collision_flag);
+  LOG(ROUTE_key);
+  LOG(route_direction);
 
   if(msg_v_id !=V_ID ){//A.hamid 
-    LOG("miss matching id");
-    LOG(msg_v_id);
-    LOG(V_ID);
-    return;
+//    LOG("miss matching id");
+//    LOG(msg_v_id);
+//    LOG(V_ID);
+    
+//    Serial.print();
   }else{
       if(collision_flag){
         Serial.print("Warning");
+        Serial.print("Warning\r\n");
+
         }else{
           Serial.print("Safe");
+          Serial.print("Safe\r\n");
+
           }
         
-      if(route_direction == 'r' || route_direction == 'R' ){
-        Serial.println("Right");
+      if(route_direction == "r"|| route_direction == "R" ){
+       Serial.print("Right");
+       Serial.print("Right\r\n");
+
+// Serial.print(1);
         
-        }else if(route_direction == 'l' || route_direction == 'L' ){
-          Serial.println("Left");
+        }else if(route_direction == "l" || route_direction == "L" ){
+         Serial.print("Left");
+         Serial.print("Left\r\n");
+
+// Serial.print(2);
           }else{
-            Serial.println("Straight");
+           Serial.print("Straight");
+            Serial.print("Straight\r\n");
+  
+// Serial.print(0);
             }
 //      Serial.println(route_direction);
     
@@ -200,6 +227,7 @@ void callback(char* topic, byte* payload, unsigned int length)
 /* void setup */
 void setup() 
 {
+
   /* Set Baud Rate */
   Serial.begin(115200);
 

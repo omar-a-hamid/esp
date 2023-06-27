@@ -10,10 +10,11 @@
 #define Send_Mode             2
 #define Receive_Mode          3
 
+//A.hamid 
 #define SERIAL_MONITOR        1 //set to 0 if you want to disable priting to serial monitor
 
 /* WiFi settings */
-const char* ssid = "Omar's phone";
+const char* ssid = "Omar's phone";//A.hamid 
 const char* password = "12345689";
 
 /* MQTT Broker settings */
@@ -28,16 +29,16 @@ const char* Subscribed_Topic ="outTopic";
 
 /***************************************/
 
-const String V_ID = "A12";
+const String V_ID                   = "A12";    //A.hamid 
 
-const char* V_ID_key                = "V_ID";
-const char* COLLISION_WARNING_key   = "collision warning";
-const char* ROUTE_key               = "ROUTE";
+const char* V_ID_key                = "V_ID";//A.hamid 
+const char* COLLISION_WARNING_key   = "collision warning";//A.hamid 
+const char* ROUTE_key               = "ROUTE";//A.hamid 
  
 
 /***************************************/
 
-#if SERIAL_MONITOR
+#if SERIAL_MONITOR              //A.hamid 
 #define LOG(x) Serial.println(x)
 #endif
 WiFiClientSecure espClient;
@@ -151,11 +152,9 @@ void callback(char* topic, byte* payload, unsigned int length)
     {
       Incomming_Message += (char)payload[i];  
     }
-//    Serial.println(Incomming_Message); 
-//  char json[] =
-//      "{\"sensor\":\"gps\",\"time\":1351824120,\"data\":[48.756080,2.302038]}";
-
+    
   // Deserialize the JSON document
+  //A.hamid 
   DeserializationError error = deserializeJson(doc, Incomming_Message);
 
   // Test if parsing succeeds.
@@ -164,22 +163,12 @@ void callback(char* topic, byte* payload, unsigned int length)
     LOG(error.f_str());
     return;
   }
-//  const String V_ID = "A12";
-//
-//const String V_ID_key                = "V_ID";
-//const String COLLISION_WARNING_key   = "collision warning";
-//const String ROUTE_key               = "ROUTE";
-// 
-
-  // Fetch values.
-  //
-  // Most of the time, you can rely on the implicit casts.
-  // In other case, you can do doc["time"].as<long>();
+//A.hamid 
   const String msg_v_id = doc[V_ID_key];
   int collision_flag = doc[COLLISION_WARNING_key];
   const char* route_direction = doc[ROUTE_key];
 
-  if(msg_v_id !=V_ID ){
+  if(msg_v_id !=V_ID ){//A.hamid 
     LOG("miss matching id");
     LOG(msg_v_id);
     LOG(V_ID);
@@ -187,7 +176,9 @@ void callback(char* topic, byte* payload, unsigned int length)
   }else{
       if(collision_flag){
         Serial.print("Warning");
-        }else{}
+        }else{
+          Serial.print("Safe");
+          }
         
       if(route_direction == 'r' || route_direction == 'R' ){
         Serial.println("Right");

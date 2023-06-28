@@ -11,7 +11,7 @@
 #define Receive_Mode          3
 
 //A.hamid 
-#define SERIAL_MONITOR        1 //set to 0 if you want to disable priting to serial monitor
+#define SERIAL_MONITOR        0 //set to 0 if you want to disable priting to serial monitor
 
 /* WiFi settings */
 //const char* ssid = "Omar's phone";//A.hamid 
@@ -29,6 +29,7 @@ const int mqtt_port = 8883;
 /* User Info */
 const char* user_ID = "ESP8266_Client";
 const char* Subscribed_Topic ="outTopic";
+const char* TOPIC_TX= "C2V_topic";
 
 /***************************************/
 
@@ -41,7 +42,7 @@ const char* ROUTE_key               = "ROUTE";//A.hamid
 
 /***************************************/
 
-#if SERIAL_MONITOR              //A.hamid 
+#if SERIAL_MONITOR              //A.hamid disable printing 
 #define LOG(x) Serial.println(x)
 #else
 #define LOG(x) //x
@@ -50,7 +51,7 @@ const char* ROUTE_key               = "ROUTE";//A.hamid
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
 
-  StaticJsonDocument<200> doc;
+StaticJsonDocument<200> doc;
 
 char DataByte_Received_UART;
 int Flag_Mode = Unknown_Mode;
@@ -126,7 +127,7 @@ void Client_Reconnect_To_MQTT_Broker(void)
     {
       /* Subscribe the topics here */
       LOG("connected succesfully");
-      client.subscribe("C2V_topic");
+      client.subscribe(TOPIX_TX);
     } 
     else 
     {
@@ -160,8 +161,8 @@ void callback(char* topic, byte* payload, unsigned int length)
     }
     
   // Deserialize the JSON document
-  //A.hamid 
-  DeserializationError error = deserializeJson(doc, Incomming_Message);
+  //A.hamid recieve msg and parseit as a json
+  DeserializationError error = deserializeJson(doc, Incomming_Message); 
 
   // Test if parsing succeeds.
   if (error) {
@@ -169,7 +170,7 @@ void callback(char* topic, byte* payload, unsigned int length)
     LOG(error.f_str());
     return;
   }
-//A.hamid 
+//A.hamid store important variables in variables
   const String msg_v_id = doc[V_ID_key];
   int collision_flag = doc[COLLISION_WARNING_key];
   String route_direction = doc[ROUTE_key];
@@ -181,7 +182,7 @@ void callback(char* topic, byte* payload, unsigned int length)
   LOG(ROUTE_key);
   LOG(route_direction);
 
-  if(msg_v_id !=V_ID ){//A.hamid 
+  if(msg_v_id !=V_ID ){//A.hamid if ids missmaatch skip msg
 //    LOG("miss matching id");
 //    LOG(msg_v_id);
 //    LOG(V_ID);
@@ -194,7 +195,7 @@ void callback(char* topic, byte* payload, unsigned int length)
 
         }else{
           // Serial.print("Safe");
-          Serial.print("S");
+          Serial.print("N");
 
           }
         

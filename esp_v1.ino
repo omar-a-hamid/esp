@@ -190,28 +190,28 @@ void callback(char* topic, byte* payload, unsigned int length)
   }else{
       if(collision_flag){
         // Serial.print("Warning");
-        Serial.print("Warning\r\n");
+        Serial.print("W");
 
         }else{
           // Serial.print("Safe");
-          Serial.print("Safe\r\n");
+          Serial.print("S");
 
           }
         
       if(route_direction == "r"|| route_direction == "R" ){
       //  Serial.print("Right");
-       Serial.print("Right\r\n");
+       Serial.print("R");
 
 // Serial.print(1);
         
         }else if(route_direction == "l" || route_direction == "L" ){
         //  Serial.print("Left");
-         Serial.print("Left\r\n");
+         Serial.print("L");
 
 // Serial.print(2);
           }else{
           //  Serial.print("Straight");
-            Serial.print("Straight\r\n");
+            Serial.print("S");
   
 // Serial.print(0);
             }

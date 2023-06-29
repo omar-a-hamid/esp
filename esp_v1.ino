@@ -11,7 +11,7 @@
 #define Receive_Mode          3
 
 //A.hamid 
-#define SERIAL_MONITOR         0//set to 0 if you want to disable priting to serial monitor
+#define SERIAL_MONITOR         1//set to 0 if you want to disable priting to serial monitor
 
 /* WiFi settings */
 //const char* ssid = "Omar's phone";//A.hamid 
@@ -255,6 +255,21 @@ void setup()
 
   pinMode(2,OUTPUT);
   digitalWrite(2,LOW);
+
+ while (!client.connected()) 
+  {
+    /* Set Flag Mode */
+    Flag_Mode = Unknown_Mode;
+
+    Client_Reconnect_To_MQTT_Broker();
+
+    digitalWrite(2,LOW);
+  }
+  for(int _counter=0;_counter<=6;_counter++){
+    digitalWrite(2,!digitalRead(2));
+    delay(100);
+    }
+  
 }
 
 
@@ -273,7 +288,11 @@ void loop()
 
     digitalWrite(2,LOW);
   }
-  digitalWrite(2,HIGH);
+
+    digitalWrite(2,!digitalRead(2));
+
+  
+
   client.loop();
 
   /* Initalize String Buffer To Hold The Published Message once */

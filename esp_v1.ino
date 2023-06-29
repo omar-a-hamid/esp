@@ -11,7 +11,7 @@
 #define Receive_Mode          3
 
 //A.hamid 
-#define SERIAL_MONITOR        0 //set to 0 if you want to disable priting to serial monitor
+#define SERIAL_MONITOR         0//set to 0 if you want to disable priting to serial monitor
 
 /* WiFi settings */
 //const char* ssid = "Omar's phone";//A.hamid 
@@ -127,7 +127,7 @@ void Client_Reconnect_To_MQTT_Broker(void)
     {
       /* Subscribe the topics here */
       LOG("connected succesfully");
-      client.subscribe(TOPIX_TX);
+      client.subscribe(TOPIC_TX);
     } 
     else 
     {
@@ -149,7 +149,7 @@ void callback(char* topic, byte* payload, unsigned int length)
     Flag_Mode = Receive_Mode;
   }
   else
-  {
+  {}{
     /* Send The Incomming Message To UART In case Of Receive Mode */
     Incomming_Message.clear();
 
@@ -188,12 +188,15 @@ void callback(char* topic, byte* payload, unsigned int length)
 //    LOG(V_ID);
     
 //    Serial.print();
+return ;
+
+
   }else{
-      if(collision_flag){
+      if(collision_flag==1){
         // Serial.print("Warning");
         Serial.print("W");
 
-        }else{
+        }else if(collision_flag==0){
           // Serial.print("Safe");
           Serial.print("N");
 
@@ -210,7 +213,7 @@ void callback(char* topic, byte* payload, unsigned int length)
          Serial.print("L");
 
 // Serial.print(2);
-          }else{
+          }else if(route_direction == "s" ){
           //  Serial.print("Straight");
             Serial.print("S");
   
@@ -249,6 +252,9 @@ void setup()
 
   client.setServer(mqtt_server, mqtt_port);
   client.setCallback(callback);
+
+  pinMode(2,OUTPUT);
+  digitalWrite(2,LOW);
 }
 
 
@@ -258,14 +264,16 @@ void loop()
 
 
 
-  if (!client.connected()) 
+  while (!client.connected()) 
   {
     /* Set Flag Mode */
     Flag_Mode = Unknown_Mode;
 
     Client_Reconnect_To_MQTT_Broker();
+
+    digitalWrite(2,LOW);
   }
-  
+  digitalWrite(2,HIGH);
   client.loop();
 
   /* Initalize String Buffer To Hold The Published Message once */

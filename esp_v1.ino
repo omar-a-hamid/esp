@@ -11,7 +11,7 @@
 #define Receive_Mode          3
 
 //A.hamid 
-#define SERIAL_MONITOR         1//set to 0 if you want to disable priting to serial monitor
+#define SERIAL_MONITOR         0//set to 0 if you want to disable priting to serial monitor
 
 /* WiFi settings */
 //const char* ssid = "Omar's phone";//A.hamid 
